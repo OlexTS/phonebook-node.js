@@ -1,5 +1,21 @@
-const app = require('./app')
+require("dotenv").config();
+const app = require("./app");
 
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000")
-})
+const database = require("./db/conection");
+const PORT = process.env.PORT;
+
+const startServer = async () => {
+  try {
+    await database();
+    app.listen(PORT, (error) => {
+      if (error) {
+        console.log("Server launch error", error);
+        return;
+      }
+      console.log(`Server running. Use our API on port: ${PORT}`);
+    });
+  } catch (error) {
+    console.log("Database launch error", error);
+  }
+};
+startServer()

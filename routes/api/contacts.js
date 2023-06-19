@@ -6,8 +6,8 @@ router.get('/', getAllContactsCtrl)
 
 router.post('/', addContactCtrl)
 
-router.delete('/:contactId', updateContactCtrl)
+router.delete('/:contactId', deleteContactCtrl )
 
-router.put('/:contactId', deleteContactCtrl)
+router.put('/:contactId', updateContactCtrl)
 
 module.exports = router

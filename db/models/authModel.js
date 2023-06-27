@@ -10,6 +10,7 @@ const authSchema = new Schema(
     },
     email: {
       type: String,
+      unique: true,
       required: [true, "Email is required"],
     },
     password: {
@@ -36,9 +37,7 @@ const userRegisterSchema = Joi.object({
   password: Joi.string()
     .pattern(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16}$/)
     .required(),
-  confirm: Joi.string()
-    .pattern(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16}$/)
-    .required(),
+  confirm: Joi.any().valid(Joi.ref('password')).required()
 });
 
 const userLogInSchema = Joi.object({

@@ -1,22 +1,27 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
-const {handleMongooseError} = require('../../helpers')
+const { handleMongooseError } = require("../../helpers");
 
 const contactSchema = new Schema(
   {
     name: {
       type: String,
-      require: true,
+      required: true,
     },
     number: {
       type: String,
-      require: true,
+      required: true,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
     },
   },
   { versionKey: false }
 );
 
-contactSchema.post('save', handleMongooseError);
+contactSchema.post("save", handleMongooseError);
 
 const addSchema = Joi.object({
   name: Joi.string().alphanum().min(3).max(30).required(),

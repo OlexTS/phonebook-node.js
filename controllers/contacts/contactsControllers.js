@@ -1,12 +1,12 @@
 const { HttpError, ctrlWrapper } = require("../../helpers");
-const {Contact} = require("../../db/models/contactModel");
+const { Contact } = require("../../db/models/contactModel");
 
 const getAllContactsCtrl = async (req, res, next) => {
   const result = await Contact.find();
   res.json(result);
 };
 const addContactCtrl = async (req, res, next) => {
-  const result = await Contact.create({...req.body});
+  const result = await Contact.create({ ...req.body });
   res.status(201).json(result);
 };
 const updateContactCtrl = async (req, res, next) => {

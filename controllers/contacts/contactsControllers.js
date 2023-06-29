@@ -3,7 +3,7 @@ const { Contact } = require("../../db/models/contactModel");
 
 const getAllContactsCtrl = async (req, res, next) => {
   const { _id: owner } = req.user;
-  const result = await Contact.find({owner});
+  const result = await Contact.find({ owner }).populate("owner", "name email");
   res.json(result);
 };
 const addContactCtrl = async (req, res, next) => {

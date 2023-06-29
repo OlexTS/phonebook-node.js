@@ -53,6 +53,6 @@ const userLogInSchema = Joi.object({
 
 const schemas = { userRegisterSchema, userLogInSchema };
 
-const User = model("User", authSchema);
+const User = model("user", authSchema);
 
 module.exports = { User, schemas };

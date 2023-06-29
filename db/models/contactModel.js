@@ -37,6 +37,6 @@ const changeSchema = Joi.object({
 
 const schemas = { addSchema, changeSchema };
 
-const Contact = model("Contact", contactSchema);
+const Contact = model("contact", contactSchema);
 
 module.exports = { Contact, schemas };

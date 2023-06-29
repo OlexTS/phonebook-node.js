@@ -49,11 +49,14 @@ const logIn = async (req, res, next) => {
   });
 };
 const logOut = async (req, res, next) => {};
-const refresh = async (req, res, next) => {};
+const getCurrent = async (req, res, next) => {
+  const { email, name } = req.user;
+  res.json({email, name})
+};
 
 module.exports = {
   register: ctrlWrapper(register),
   logIn: ctrlWrapper(logIn),
   logOut: ctrlWrapper(logOut),
-  refresh: ctrlWrapper(refresh),
-};
+  getCurrent: ctrlWrapper(getCurrent)
+}

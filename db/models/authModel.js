@@ -17,10 +17,10 @@ const authSchema = new Schema(
       type: String,
       required: [true, "Please set a password for user"],
     },
-    // verificationToken: {
-    //   type: String,
-    //   required: [true, "Verify token is required"],
-    // },
+    token: {
+      type: String,
+      default: "",
+    },
   },
   { versionKey: false }
 );

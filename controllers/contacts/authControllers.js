@@ -40,7 +40,8 @@ const logIn = async (req, res, next) => {
 
   const payload = { id: user._id }
 
-  const token = jwt.sign(payload, SECRET_KEY, {expiresIn: '23h'});
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
+  await User.findByIdAndUpdate(user._id, {token})
   res.json({
     token: token, user: {
       name: user.name,
@@ -48,7 +49,12 @@ const logIn = async (req, res, next) => {
     }
   });
 };
-const logOut = async (req, res, next) => {};
+const logOut = async (req, res, next) => {
+  const { _id } = req.user;
+  await User.findByIdAndUpdate(_id, { token: '' });
+
+  res.json({message: 'Logout success'})
+};
 const getCurrent = async (req, res, next) => {
   const { email, name } = req.user;
   res.json({email, name})

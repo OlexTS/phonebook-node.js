@@ -1,6 +1,6 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
-const { handleMongooseError } = require('../../helpers');
+const { handleMongooseError } = require("../../helpers");
 
 const authSchema = new Schema(
   {
@@ -31,13 +31,13 @@ const authSchema = new Schema(
     },
     verificationCode: {
       type: String,
-      default: '',
-    }
+      default: "",
+    },
   },
   { versionKey: false }
 );
 
-authSchema.post('save', handleMongooseError);
+authSchema.post("save", handleMongooseError);
 
 const userRegisterSchema = Joi.object({
   name: Joi.string().alphanum().min(3).max(30).required(),
@@ -49,7 +49,7 @@ const userRegisterSchema = Joi.object({
   password: Joi.string()
     .pattern(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16}$/)
     .required(),
-  confirm: Joi.any().valid(Joi.ref('password')).required()
+  confirm: Joi.any().valid(Joi.ref("password")).required(),
 });
 
 const userLogInSchema = Joi.object({
@@ -63,7 +63,15 @@ const userLogInSchema = Joi.object({
     .required(),
 });
 
-const schemas = { userRegisterSchema, userLogInSchema };
+const userVerifySchema = Joi.object({
+  email: Joi.string()
+    .pattern(
+      /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)*$/
+    )
+    .required(),
+});
+
+const schemas = { userRegisterSchema, userLogInSchema, userVerifySchema };
 
 const User = model("user", authSchema);
 

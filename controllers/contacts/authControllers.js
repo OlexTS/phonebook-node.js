@@ -49,11 +49,38 @@ const verifyEmail = async (req, res) => {
   const user = await User.findOne({ verificationCode });
 
   if (!user) {
-    throw HttpError(404, 'Email not found')
+    throw HttpError(404, "Email not found");
   }
-  await User.findByIdAndUpdate(user._id, { verificationCode: '', verify: true });
-  res.json({message: 'Verify email success'})
-}
+  await User.findByIdAndUpdate(user._id, {
+    verificationCode: "",
+    verify: true,
+  });
+  res.json({ message: "Verify email success" });
+};
+
+const resendVerifyEmail = async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+
+  if (!email) {
+    throw HttpError(400, "Missing required field email");
+  }
+  if (!user) {
+    throw HttpError(400, "Not found");
+  }
+  if (user.verify) {
+    throw HttpError(400, "Verification has already been passed");
+  }
+
+  const verifyEmail = {
+    to: email,
+    subject: "Verify email",
+    html: `<a target='_blank' href='${BASE_URL}/users/verify/${user.verificationCode}'>Please click to verify your email</a>`,
+  };
+
+  await sendEmail(verifyEmail);
+  res.json({ message: "Verify email send success" });
+};
 
 const logIn = async (req, res) => {
   const { email, password } = req.body;
@@ -62,8 +89,8 @@ const logIn = async (req, res) => {
     throw HttpError(401, "Email or password invalid");
   }
   if (!user.verify) {
-  throw HttpError(401, "Email was not verified")
-}
+    throw HttpError(401, "Email was not verified");
+  }
   const comparePassword = await bcrypt.compare(password, user.password);
   if (!comparePassword) {
     throw HttpError(401, "Email or password invalid");
@@ -106,6 +133,7 @@ const updateAvatar = async (req, res) => {
 module.exports = {
   register: ctrlWrapper(register),
   verifyEmail: ctrlWrapper(verifyEmail),
+  resendVerifyEmail: ctrlWrapper(resendVerifyEmail),
   logIn: ctrlWrapper(logIn),
   logOut: ctrlWrapper(logOut),
   getCurrent: ctrlWrapper(getCurrent),
